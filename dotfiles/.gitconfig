@@ -1,0 +1,5 @@
+[user]
+	email = realworlddevs@outlook.com
+	name = Jim Stevens
+[core]
+	excludesfile = /Users/ka8kgj/.gitignore_global
