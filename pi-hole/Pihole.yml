@@ -1,0 +1,27 @@
+---
+# https://hub.docker.com/r/pihole/pihole
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    networks:
+      rwdmacvlan:
+        ipv4_address: 192.168.50.41
+    hostname: pihole
+    environment:
+      TZ: ${TIME_ZONE_VALUE}
+      WEBPASSWORD: ${PIHOLE_PWD}
+    volumes:
+      - CHANGE_TO_COMPOSE_DATA_PATH/pi-hole/etc-pihole:/etc/pihole
+      - CHANGE_TO_COMPOSE_DATA_PATH/pi-hole/etc-dnsmasq.d:/etc/dnsmasq.d  
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pihole.rule=Host(`pihole.local.rwdevs.com`)
+      - traefik.http.routers.pihole.tls=true
+      - traefik.http.routers.pihole.entrypoints=websecure
+      - traefik.http.services.pihole.loadbalancer.server.port=80
+    restart: unless-stopped
+networks:
+  rwdmacvlan:
+    external: true
