@@ -5,10 +5,10 @@ services:
     restart: unless-stopped
     command:
       # logging config (levels are TRACE, DEBUG, INFO, WARN, ERROR, FATAL, and PANIC)
-      - --log.level=INFO
-      #- --log.filepath=/var/log/traefik.log
+      - --log.level=WARN
+      #- --log.filepath=traefik.log
       #- --accesslog=true
-      #- --accesslog.filepath=/var/log/traefik-access.log
+      #- --accesslog.filepath=access.log
       # enable traefik dashboard
       - --api.dashboard=true
       - --api.insecure=true
@@ -16,6 +16,8 @@ services:
       - --providers.docker=true
       - --providers.docker.network=proxy
       - --providers.docker.exposedbydefault=false
+      # allow traefik to config via file
+      - --providers.file.filename=config.yml
       # setup insecure listener that redirects all traffice to TLS
       - --entryPoints.web.address=:80
       - --entryPoints.web.http.redirections.entryPoint.to=websecure
@@ -36,8 +38,7 @@ services:
       #- --certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
       - --certificatesresolvers.cloudflare.acme.email=****
-      - --certificatesresolvers.cloudflare.acme.storage=acme.json
-      
+      - --certificatesresolvers.cloudflare.acme.storage=acme.json      
     ports:
       - 80:80
       - 443:443
@@ -51,7 +52,11 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - CHANGE_TO_COMPOSE_DATA_PATH/traefik/acme.json:/acme.json
+      - CHANGE_TO_COMPOSE_DATA_PATH/traefik/config.yml:/config.yml:ro
+      #- CHANGE_TO_COMPOSE_DATA_PATH/traefik/access.log:/access.log
+      #- CHANGE_TO_COMPOSE_DATA_PATH/traefik/traefik.log:/traefik.log
+      #- CHANGE_TO_COMPOSE_DATA_PATH/traefik/traefik.yml:/traefik.yml:ro
+      - CHANGE_TO_COMPOSE_DATA_PATH/traefik/acme.json:/acme.json      
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.rule=Host(`proxy.local.rwdevs.com`)
