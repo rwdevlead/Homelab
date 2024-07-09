@@ -79,7 +79,7 @@ http:
     pihole:
       loadBalancer:
         servers:
-          - url: "http://192.168.50.41:80"
+          - url: "http://192.168.50.41"
         passHostHeader: true
     homebridge:
       loadBalancer:
@@ -104,7 +104,7 @@ http:
     openmediavault:
       loadBalancer:
         servers:
-          - url: "http://192.168.50.111:80"
+          - url: "http://192.168.50.10:8443"
         passHostHeader: true
 #endregion
   middlewares:
