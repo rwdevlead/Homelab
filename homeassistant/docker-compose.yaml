@@ -1,0 +1,21 @@
+---
+services:
+  homeassistant:
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    container_name: homeassistant
+    ports:
+      - 8123:8123
+    volumes:
+      - CHANGE_TO_COMPOSE_DATA_PATH/home-assistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+    restart: unless-stopped
+    privileged: true  
+    networks: 
+      - proxy
+networks:
+  proxy:
+    external: true
