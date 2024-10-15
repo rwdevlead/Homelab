@@ -1,0 +1,62 @@
+---
+# For configuration options and examples, please see:
+# https://gethomepage.dev/configs/services
+
+- Network:
+    - Pi-Hole1:
+        icon: pi-hole.svg
+        href: {{HOMEPAGE_VAR_PIHOLE_URL}}
+        description: pi-hole DNS on Docker
+        server: omv-docker # The docker server that was configured
+        container: pihole # The name of the container you'd like to connect
+    - traefik:
+        icon: traefik.svg
+        href: {{HOMEPAGE_VAR_PROXY_URL}}
+        server: omv-docker # The docker server that was configured
+        container: traefik # The name of the container you'd like to connect
+        description: Reverse Proxy
+        widget:
+            type: traefik
+            url: {{HOMEPAGE_VAR_PROXY_URL}}
+            username: admin # optional
+            password: I.h@t3.w33D$ # optional
+
+- Local Services:
+    - Proxmox:
+        statusStyle: "basic"
+        icon: proxmox.svg
+        href: {{HOMEPAGE_VAR_PROXMOX_URL}}
+        description: proxmox
+        siteMonitor: https://proxmox.local.rwdevs.com
+        widget:
+              type: proxmox
+              url: {{HOMEPAGE_VAR_PROXMOX_URL}}
+              username:  {{HOMEPAGE_VAR_PROXMOX_USER}}
+              password:  {{HOMEPAGE_VAR_PROXMOX_API_KEY}}
+    - TrueNAS:
+        statusStyle: "basic"
+        icon: truenas.svg
+        href: {{HOMEPAGE_VAR_TRUENAS_URL}}
+        description: backups on NAS
+        siteMonitor: {{HOMEPAGE_VAR_TRUENAS_URL}}
+        widget:
+            type: truenas
+            url: {{HOMEPAGE_VAR_TRUENAS_URL}}
+            # username: user # not required if using api key
+            # password: pass # not required if using api key
+            key: {{HOMEPAGE_VAR_TRUENAS_KEY}} # not required if using username / password
+            enablePools: true # optional, defaults to false
+            nasType: scale # defaults to scale, must be set to 'core' if using enablePools with TrueNAS Core
+    - OMV:
+        statusStyle: "basic"
+        icon: openmediavault.svg
+        href: {{HOMEPAGE_VAR_OMV_URL}}
+        description: Open Media Vault
+        siteMonitor: https://omv.local.rwdevs.com
+        widget:
+            type: openmediavault
+            url: {{HOMEPAGE_VAR_OMV_URL}}
+            username: {{HOMEPAGE_VAR_OMV_USR}}
+            password: {{HOMEPAGE_VAR_OMV_PWD}}
+            method: services.getStatus # required
+    
