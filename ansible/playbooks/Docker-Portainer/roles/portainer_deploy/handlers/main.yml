@@ -1,0 +1,7 @@
+---
+- name: Start Portainer
+  community.docker.docker_compose:
+    #project_src: /home/ubuntu/docker-compose/portainer
+    project_src: "{{docker_compose_folder}}"
+    state: present
+    restarted: true

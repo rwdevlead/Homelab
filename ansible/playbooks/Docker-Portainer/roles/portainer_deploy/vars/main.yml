@@ -1,0 +1,3 @@
+---
+portainer_version: "latest"
+docker_compose_folder: "/home/ka8kgj/docker-compose/portainer"

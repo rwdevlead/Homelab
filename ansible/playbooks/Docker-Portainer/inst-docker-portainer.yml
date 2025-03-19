@@ -1,0 +1,7 @@
+---
+- name: Install Docker on Ubuntu
+  hosts: DockerDev
+  become: true
+  roles:
+    - docker_install
+    - portainer_deploy
