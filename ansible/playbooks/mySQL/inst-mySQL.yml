@@ -1,0 +1,6 @@
+---
+- name: Install mySQL on docker
+  hosts: 192.168.50.14
+  become: true
+  roles:
+    - mySQL_deploy

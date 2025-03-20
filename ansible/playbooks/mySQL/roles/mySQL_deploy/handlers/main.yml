@@ -1,0 +1,6 @@
+---
+- name: Start mySQL
+  community.docker.docker_compose:
+    project_src: "{{docker_compose_folder}}"
+    state: present
+    restarted: true

@@ -1,0 +1,7 @@
+---
+mysql_version: "latest"
+docker_compose_folder: "/home/ka8kgj/docker-compose/mysql"
+mysql_root_password: "your_password"
+mysql_database_name: "testDB"
+mysql_user_name: "ka8kgj"
+mysql_user_password: "your_password"

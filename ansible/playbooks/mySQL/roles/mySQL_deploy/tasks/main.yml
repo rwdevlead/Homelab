@@ -1,0 +1,34 @@
+---
+- name: Ensure docker-compose is installed
+  ansible.builtin.package:
+    name: docker-compose
+    state: present
+
+- name: Ensure Docker service is running
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Setup mySQL directory
+  ansible.builtin.file:
+    path: "{{docker_compose_folder}}"
+    state: directory
+    mode: '0755'  # Optional file permissions
+    owner: ka8kgj  # Optional ownership
+    group: ka8kgj  # Optional group ownership
+
+- name: Deploy mySQL using Docker Compose
+  ansible.builtin.template:
+    src: "templates/docker_compose.yml.j2"
+    dest: "{{docker_compose_folder}}/docker-compose.yml"
+    mode: '0755'  # Optional file permissions
+    owner: ka8kgj  # Optional ownership
+    group: ka8kgj  # Optional group ownership
+  notify:
+    - Start mySQL
+
+- name: Run mySQL docker-compose up
+  community.docker.docker_compose:
+    project_src: "{{docker_compose_folder}}"
+    state: present
