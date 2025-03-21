@@ -1,6 +1,6 @@
 ---
 - name: Install Docker on Ubuntu
-  hosts: DockerDev
+  hosts: 192.168.50.14
   become: true
   roles:
     - docker_install
