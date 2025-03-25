@@ -4,56 +4,16 @@ http:
     proxmox:
       entryPoints:
         - "websecure"
-      rule: "Host(`proxmox.local.example.com`)"
+      rule: "Host(`proxmox.local.rwdevs.com`)"
       middlewares:
         - default-headers
         - https-redirectscheme
       tls: {}
       service: proxmox
-    pihole:
-      entryPoints:
-        - "websecure"
-      rule: "Host(`pihole.local.example.com`)"
-      middlewares:
-        - redirectregex-pihole
-        - default-headers
-        - addprefix-pihole
-        - https-redirectscheme
-      tls: {}
-      service: pihole
-    homebridge:
-      entryPoints:
-        - "websecure"
-      rule: "Host(`homebridge.local.example.com`)"
-      middlewares:
-        - default-headers
-        - https-redirectscheme
-      tls: {}
-      service: homebridge
-    homeassistant:
-      # For Homeassistant config, check: https://www.home-assistant.io/integrations/http/#reverse-proxies
-      # This relies on Homeassistant using http. No certs are needed in the Homeassistant config.
-      entryPoints:
-        - "websecure"
-      rule: "Host(`ha.local.example.com`)"
-      middlewares:
-        - default-headers
-        - https-redirectscheme
-      tls: {}
-      service: homeassistant
-    syncthing:
-      entryPoints:
-        - "websecure"
-      rule: "Host(`sync.local.example.com`)"
-      middlewares:
-        - default-headers
-        - https-redirectscheme
-      tls: {}
-      service: syncthing
     truenas:
       entryPoints:
         - "websecure"
-      rule: "Host(`truenas.local.example.com`)"
+      rule: "Host(`truenas.local.rwdevs.com`)"
       middlewares:
         - default-headers
         - https-redirectscheme
@@ -62,12 +22,21 @@ http:
     openmediavault:
       entryPoints:
         - "websecure"
-      rule: "Host(`omv.local.example.com`)"
+      rule: "Host(`omv.local.rwdevs.com`)"
       middlewares:
         - default-headers
         - https-redirectscheme
       tls: {}
       service: openmediavault
+    portainer:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`portainer.local.rwdevs.com`)"
+      middlewares:
+        - default-headers
+        - https-redirectscheme
+      tls: {}
+      service: portainer
 #endregion
 #region services
   services:
@@ -76,49 +45,27 @@ http:
         servers:
           - url: "https://192.168.50.11:8006"
         passHostHeader: true
-    pihole:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.50.41"
-        passHostHeader: true
-    homebridge:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.50.10:10999"
-        passHostHeader: true
-    homeassistant:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.50.10:10999"
-        passHostHeader: true
-    syncthing:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.50.10:8384"
-        passHostHeader: true
     truenas:
       loadBalancer:
         servers:
           - url: "https://192.168.50.12"
-        passHostHeader: true    
+        passHostHeader: true 
     openmediavault:
       loadBalancer:
         servers:
-          - url: "http://192.168.50.10:8443"
+          - url: "https://192.168.50.10:8443"
+        passHostHeader: true   
+    portainer:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.50.14:9443"
         passHostHeader: true
 #endregion
   middlewares:
-    addprefix-pihole:
-      addPrefix:
-        prefix: "/admin"
     https-redirectscheme:
       redirectScheme:
         scheme: https
         permanent: true
-    redirectregex-pihole:
-      redirectRegex:
-        regex: "/admin/(.*)"
-        replacement: /
     default-headers:
       headers:
         frameDeny: true

@@ -52,11 +52,21 @@
         icon: openmediavault.svg
         href: {{HOMEPAGE_VAR_OMV_URL}}
         description: Open Media Vault
-        siteMonitor: https://omv.local.rwdevs.com
+        siteMonitor: {{HOMEPAGE_VAR_OMV_URL}}
         widget:
             type: openmediavault
             url: {{HOMEPAGE_VAR_OMV_URL}}
             username: {{HOMEPAGE_VAR_OMV_USR}}
             password: {{HOMEPAGE_VAR_OMV_PWD}}
             method: services.getStatus # required
-    
+    - portainer-dev:
+        statusStyle: "basic"
+        icon: portainer.svg
+        href: {{HOMEPAGE_VAR_PORTAINER_DEV_URL}}
+        description: Container Management 
+        siteMonitor: {{HOMEPAGE_VAR_PORTAINER_DEV_URL}}
+        widget:
+            type: portainer
+            url: {{HOMEPAGE_VAR_PORTAINER_DEV_URL}}
+            env: 3
+            key: {{HOMEPAGE_VAR_PORTAINER_DEV_KEY}}
