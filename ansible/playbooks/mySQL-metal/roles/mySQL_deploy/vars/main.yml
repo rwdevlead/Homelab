@@ -1,0 +1,6 @@
+---
+mysql_package: "mysql-server-8.0"
+mysql_root_password: "your_password"
+mysql_database_name: "testDB"
+mysql_user_name: "ka8kgj"
+mysql_user_password: "your_password"

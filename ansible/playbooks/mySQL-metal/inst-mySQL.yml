@@ -1,0 +1,6 @@
+---
+- name: Install mySQL on VM
+  hosts: mySQL
+  become: true
+  roles:
+    - mySQL_deploy

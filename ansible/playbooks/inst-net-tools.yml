@@ -1,5 +1,5 @@
 ---
-- hosts: nodes
+- hosts: "*"
   become: true
   tasks:
     - name: make sure net-tools are installed on all nodes

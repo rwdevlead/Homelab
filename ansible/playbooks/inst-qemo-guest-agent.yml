@@ -1,3 +1,4 @@
+---
 - name: install latest qemu-guest-agent
   hosts: "*"
   tasks:

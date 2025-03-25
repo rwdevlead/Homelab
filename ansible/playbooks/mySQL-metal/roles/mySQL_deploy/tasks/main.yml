@@ -1,0 +1,55 @@
+---
+- name: install python, pip etc
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - pip
+    - python3
+    - python3-pymysql 
+    - default-libmysqlclient-dev
+
+- name: install mysql
+  ansible.builtin.apt:
+    name: "{{mysql_package}}"
+    state: present
+    update_cache: yes
+
+- name: start and enable mysql service
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: Change MySQL root password
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    state: present
+
+- name: creating mysql user
+  community.mysql.mysql_user:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{mysql_user_name}}"
+    password: "{{mysql_user_password}}"
+    priv: '*.*:ALL'
+    host: '%'
+    state: present
+
+- name: creating test db
+  community.mysql.mysql_db:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{mysql_database_name}}"
+    state: present
+
+- name: Enable remote login to mysql
+  ansible.builtin.lineinfile:
+    path: /etc/mysql/mysql.conf.d/mysqld.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+    backup: yes
+  notify: "Restart mySQL"
