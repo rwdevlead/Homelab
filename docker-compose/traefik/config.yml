@@ -1,5 +1,5 @@
 http:
- #region routers
+  #region routers
   routers:
     proxmox:
       entryPoints:
@@ -28,6 +28,17 @@ http:
         - https-redirectscheme
       tls: {}
       service: openmediavault
+    pihole:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`pihole.local.rwdevs.com`)"
+      middlewares:
+        - redirectregex-pihole
+        - default-headers
+        - addprefix-pihole
+        - https-redirectscheme
+      tls: {}
+      service: pihole
     portainer:
       entryPoints:
         - "websecure"
@@ -37,8 +48,8 @@ http:
         - https-redirectscheme
       tls: {}
       service: portainer
-#endregion
-#region services
+  #endregion
+  #region services
   services:
     proxmox:
       loadBalancer:
@@ -49,19 +60,27 @@ http:
       loadBalancer:
         servers:
           - url: "https://192.168.50.12"
-        passHostHeader: true 
+        passHostHeader: true
     openmediavault:
       loadBalancer:
         servers:
           - url: "https://192.168.50.10:8443"
-        passHostHeader: true   
+        passHostHeader: true
+    pihole:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.50.41"
+        passHostHeader: true
     portainer:
       loadBalancer:
         servers:
           - url: "https://192.168.50.14:9443"
         passHostHeader: true
-#endregion
+  #endregion
   middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: "/admin/"
     https-redirectscheme:
       redirectScheme:
         scheme: https
@@ -78,14 +97,18 @@ http:
         customFrameOptionsValue: SAMEORIGIN
         customRequestHeaders:
           X-Forwarded-Proto: https
+    redirectregex-pihole:
+      redirectRegex:
+        regex: "/admin/(.*)"
+        replacement: "/"
     default-whitelist:
       ipAllowList:
         sourceRange:
-        - "10.0.0.0/8"
-        - "192.168.50.0/24"
-        - "172.18.0.0/16"
+          - "10.0.0.0/8"
+          - "192.168.50.0/24"
+          - "172.18.0.0/16"
     secured:
       chain:
         middlewares:
-        - default-whitelist
-        - default-headers
+          - default-whitelist
+          - default-headers

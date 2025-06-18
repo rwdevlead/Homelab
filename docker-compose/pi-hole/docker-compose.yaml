@@ -1,5 +1,4 @@
 ---
-
 # https://hub.docker.com/r/pihole/pihole
 # More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
 services:
@@ -12,17 +11,23 @@ services:
         ipv4_address: 192.168.50.41
     hostname: pihole
     environment:
+      # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
       TZ: ${TIME_ZONE_VALUE}
-      WEBPASSWORD: ${PIHOLE_PWD}
+      # Set a password to access the web interface. Not setting one will result in a random password being assigned
+      FTLCONF_webserver_api_password: ${PIHOLE_PWD}
+      # If using Docker's default `bridge` network setting the dns listening mode should be set to 'all'
+      #FTLCONF_dns_listeningMode: 'all'
+      # Uncomment the below if you have custom dnsmasq config files that you want to persist
+      #FTLCONF_misc_etc_dnsmasq_d: 'true'
     volumes:
       - CHANGE_TO_COMPOSE_DATA_PATH/pi-hole/etc-pihole:/etc/pihole
-      - CHANGE_TO_COMPOSE_DATA_PATH/pi-hole/etc-dnsmasq.d:/etc/dnsmasq.d  
+      - CHANGE_TO_COMPOSE_DATA_PATH/pi-hole/etc-dnsmasq.d:/etc/dnsmasq.d
     #labels:
-      #- traefik.enable=true
-      #- traefik.http.routers.pihole.rule=Host(`pihole.local.rwdevs.com`)
-      #- traefik.http.routers.pihole.tls=true
-      #- traefik.http.routers.pihole.entrypoints=websecure
-      #- traefik.http.services.pihole.loadbalancer.server.port=80
+    #- traefik.enable=true
+    #- traefik.http.routers.pihole.rule=Host(`pihole.local.rwdevs.com`)
+    #- traefik.http.routers.pihole.tls=true
+    #- traefik.http.routers.pihole.entrypoints=websecure
+    #- traefik.http.services.pihole.loadbalancer.server.port=80
 networks:
   rwdmacvlan:
     external: true
